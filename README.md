@@ -2,6 +2,76 @@
 
 Sistema completo de gerenciamento de vendas para mercearias, desenvolvido com Django e Bootstrap 5.
 
+**Desenvolvido por:** Carlos Maute  
+**Localização:** Moçambique, Maputo  
+**Contato:** +258 865105545 | carlxyzsmaute@gmail.com  
+**WhatsApp:** [+258 865105545](https://wa.me/258865105545)
+
+## 🚀 Deploy no Render
+
+### Pré-requisitos
+- Conta no [Render.com](https://render.com)
+- Repositório Git (GitHub, GitLab, etc.)
+
+### Passos para Deploy
+
+1. **Push do código para o repositório Git:**
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/Maute007/PDVSYSTEM.git
+git push -u origin main
+```
+
+2. **Criar PostgreSQL Database no Render:**
+   - Acesse [Render Dashboard](https://dashboard.render.com)
+   - Clique em "New +" e selecione "PostgreSQL"
+   - Preencha:
+     - **Name:** pdvsystem-db
+     - **Database:** pdvsystem
+     - **User:** pdvsystem
+     - **Region:** Frankfurt (ou mais próximo)
+   - Clique em "Create Database"
+   - **Copie a URL interna** (Internal Database URL)
+
+3. **Criar Web Service no Render:**
+   - No Dashboard, clique em "New +" e selecione "Web Service"
+   - Conecte seu repositório Git
+   - Preencha:
+     - **Name:** pdvsystem
+     - **Region:** Frankfurt (mesma do banco)
+     - **Branch:** main
+     - **Root Directory:** (deixe vazio)
+     - **Runtime:** Python 3
+     - **Build Command:** `./build.sh`
+     - **Start Command:** `gunicorn PDVSYSTEM.wsgi:application`
+
+4. **Configurar Variáveis de Ambiente:**
+   Na seção "Environment Variables", adicione:
+   ```
+   SECRET_KEY=your-secret-key-here-generate-a-random-one
+   DEBUG=False
+   ALLOWED_HOSTS=pdvsystem.onrender.com
+   DATABASE_URL=postgresql://user:password@host/database
+   ```
+
+5. **Deploy:**
+   - Clique em "Create Web Service"
+   - Aguarde 5-10 minutos para build e deploy
+   - Acesse: `https://pdvsystem.onrender.com/admin/`
+   - Login: `admin` / `admin123` (ALTERE IMEDIATAMENTE!)
+
+### 📦 Arquivos de Configuração Criados
+
+- ✅ `requirements.txt` - Dependências Python
+- ✅ `build.sh` - Script de build automático
+- ✅ `Procfile` - Comando de inicialização
+- ✅ `runtime.txt` - Python 3.13.0
+- ✅ `.gitignore` - Arquivos ignorados
+
+---
+
 ## ✨ Funcionalidades
 
 ### 📦 Gestão de Produtos
