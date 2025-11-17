@@ -2,8 +2,10 @@
 # exit on error
 set -o errexit
 
+# Upgrade pip to latest version
+python -m pip install --upgrade pip setuptools wheel
+
 # Install dependencies
-pip install --upgrade pip
 pip install -r requirements.txt
 
 # Collect static files
