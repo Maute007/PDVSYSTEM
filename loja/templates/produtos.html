@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block title %}Produtos - PDV System{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="row mb-4 animate__animated animate__fadeIn">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold mb-1">
+                    <i class="bi bi-box-seam me-2"></i>
+                    Gerenciar Produtos
+                </h2>
+                <p class="text-muted mb-0">Visualize e gerencie todos os produtos do seu estoque</p>
+            </div>
+            <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                <i class="bi bi-plus-circle me-2"></i>
+                Adicionar Produto
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Filter and Search -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card-custom">
+            <div class="card-body">
+                <form method="GET" class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label-custom">Pesquisar</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" name="search" class="form-control form-control-custom" 
+                                   placeholder="Buscar por nome, código..." value="{{ search_query }}">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label-custom">Categoria</label>
+                        <select name="category" class="form-select form-control-custom">
+                            <option value="">Todas</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat.id }}" {% if category_filter == cat.id|stringformat:"s" %}selected{% endif %}>
+                                {{ cat.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label-custom">Status do Estoque</label>
+                        <select name="status" class="form-select form-control-custom">
+                            <option value="">Todos</option>
+                            <option value="IN_STOCK" {% if status_filter == 'IN_STOCK' %}selected{% endif %}>Em Estoque</option>
+                            <option value="LOW_STOCK" {% if status_filter == 'LOW_STOCK' %}selected{% endif %}>Estoque Baixo</option>
+                            <option value="OUT_OF_STOCK" {% if status_filter == 'OUT_OF_STOCK' %}selected{% endif %}>Sem Estoque</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary-custom w-100">
+                            <i class="bi bi-funnel me-2"></i>
+                            Filtrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Products Table -->
+<div class="row">
+    <div class="col-12">
+        <div class="card-custom animate__animated animate__fadeInUp">
+            <div class="card-header-custom d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-list-ul me-2"></i>Lista de Produtos ({{ products|length }} itens)</span>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-sm btn-light active">
+                        <i class="bi bi-table"></i>
+                    </button>
+                    <button class="btn btn-sm btn-light">
+                        <i class="bi bi-grid-3x3-gap"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Código</th>
+                                <th>Produto</th>
+                                <th>Categoria</th>
+                                <th>Preço</th>
+                                <th>Estoque</th>
+                                <th>Unidade</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                            <tr>
+                                <td><strong>{{ product.code }}</strong></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        {% if product.image %}
+                                        <img src="{{ product.image.url }}" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;" alt="{{ product.name }}">
+                                        {% else %}
+                                        <div class="bg-light rounded p-2 me-3">
+                                            <i class="bi bi-box text-primary fs-4"></i>
+                                        </div>
+                                        {% endif %}
+                                        <div>
+                                            <strong>{{ product.name }}</strong>
+                                            <small class="d-block text-muted">{{ product.description|truncatewords:5 }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge bg-primary">{{ product.category.name }}</span></td>
+                                <td><strong class="text-success">{{ product.unit_price|floatformat:2 }} MT</strong></td>
+                                <td>
+                                    <strong class="{% if product.stock_quantity == 0 %}text-danger{% elif product.stock_status == 'LOW_STOCK' %}text-warning{% else %}text-success{% endif %}">
+                                        {{ product.stock_quantity|floatformat:"-3" }}
+                                    </strong>
+                                </td>
+                                <td>{{ product.unit_of_measure.abbreviation }}</td>
+                                <td>
+                                    {% if product.stock_status == 'OUT_OF_STOCK' %}
+                                        <span class="badge bg-danger badge-custom">Sem Estoque</span>
+                                    {% elif product.stock_status == 'LOW_STOCK' %}
+                                        <span class="badge bg-warning badge-custom">Estoque Baixo</span>
+                                    {% else %}
+                                        <span class="badge bg-success badge-custom">Em Estoque</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="/admin/loja/product/{{ product.id }}/change/" class="btn btn-sm btn-outline-primary" target="_blank" title="Editar no Admin">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="8" class="text-center py-5">
+                                    <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
+                                    <p class="text-muted">Nenhum produto encontrado</p>
+                                    {% if search_query or category_filter or status_filter %}
+                                    <a href="{% url 'produtos' %}" class="btn btn-sm btn-primary">Limpar Filtros</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Product Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 16px; border: none;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #4f46e5, #6366f1); color: white; border-radius: 16px 16px 0 0;">
+                <h5 class="modal-title">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    Adicionar Novo Produto
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4 text-center">
+                <i class="bi bi-gear-fill fs-1 text-primary mb-3 d-block"></i>
+                <h5 class="mb-3">Gerenciar Produtos via Django Admin</h5>
+                <p class="text-muted mb-4">
+                    Para adicionar, editar ou remover produtos, utilize o painel administrativo do Django que oferece 
+                    funcionalidades completas de gerenciamento com validações, upload de imagens e controle de estoque.
+                </p>
+                <a href="/admin/loja/product/add/" target="_blank" class="btn btn-primary btn-lg">
+                    <i class="bi bi-box-arrow-up-right me-2"></i>
+                    Abrir Django Admin
+                </a>
+                <hr class="my-4">
+                <p class="text-muted small mb-0">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Esta ação abrirá uma nova aba com o formulário completo de cadastro de produtos.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

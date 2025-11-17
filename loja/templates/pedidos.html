@@ -1,0 +1,412 @@
+{% extends 'base.html' %}
+
+{% block title %}Pedidos - PDV System{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="row mb-4 animate__animated animate__fadeIn">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold mb-1">
+                    <i class="bi bi-receipt me-2"></i>
+                    Gerenciar Pedidos
+                </h2>
+                <p class="text-muted mb-0">Visualize e gerencie pedidos remotos de clientes</p>
+            </div>
+            <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#newOrderModal">
+                <i class="bi bi-plus-circle me-2"></i>
+                Novo Pedido
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3 col-sm-6">
+        <div class="stats-card warning animate__animated animate__fadeInUp">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon warning me-3">
+                    <i class="bi bi-hourglass-split"></i>
+                </div>
+                <div>
+                    <h3 class="fw-bold mb-0">23</h3>
+                    <p class="text-muted mb-0">Pendentes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6">
+        <div class="stats-card primary animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon primary me-3">
+                    <i class="bi bi-upload"></i>
+                </div>
+                <div>
+                    <h3 class="fw-bold mb-0">15</h3>
+                    <p class="text-muted mb-0">Aguardando Confirmação</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6">
+        <div class="stats-card success animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon success me-3">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div>
+                    <h3 class="fw-bold mb-0">87</h3>
+                    <p class="text-muted mb-0">Confirmados</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6">
+        <div class="stats-card danger animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon danger me-3">
+                    <i class="bi bi-x-circle"></i>
+                </div>
+                <div>
+                    <h3 class="fw-bold mb-0">5</h3>
+                    <p class="text-muted mb-0">Cancelados</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card-custom">
+            <div class="card-body">
+                <form class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label-custom">Pesquisar</label>
+                        <input type="text" class="form-control form-control-custom" placeholder="Código, cliente...">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label-custom">Status</label>
+                        <select class="form-select form-control-custom">
+                            <option selected>Todos</option>
+                            <option>Pendente</option>
+                            <option>Comprovante Enviado</option>
+                            <option>Confirmado</option>
+                            <option>Em Processamento</option>
+                            <option>Pronto</option>
+                            <option>Concluído</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label-custom">Método de Pagamento</label>
+                        <select class="form-select form-control-custom">
+                            <option selected>Todos</option>
+                            <option>Dinheiro</option>
+                            <option>Débito</option>
+                            <option>Crédito</option>
+                            <option>PIX</option>
+                            <option>Transferência</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary-custom w-100">
+                            <i class="bi bi-funnel me-2"></i>
+                            Filtrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Orders Table -->
+<div class="row">
+    <div class="col-12">
+        <div class="card-custom animate__animated animate__fadeInUp">
+            <div class="card-header-custom">
+                <i class="bi bi-list-ul me-2"></i>Lista de Pedidos (130 itens)
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Código</th>
+                                <th>Cliente</th>
+                                <th>Data</th>
+                                <th>Valor</th>
+                                <th>Pagamento</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>ABC12345</strong></td>
+                                <td>
+                                    <div>
+                                        <strong>Maria Santos</strong>
+                                        <small class="d-block text-muted">(244) 900-000-001</small>
+                                    </div>
+                                </td>
+                                <td>13/11/2025 10:30</td>
+                                <td><strong class="text-success">R$ 345,00</strong></td>
+                                <td><span class="badge bg-primary">PIX</span></td>
+                                <td><span class="badge bg-warning badge-custom">Comprovante Enviado</span></td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#orderDetailsModal" onclick="showToast('Carregando detalhes...', 'info')">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-success" onclick="showToast('Pedido confirmado!', 'success')">
+                                            <i class="bi bi-check-lg"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="showToast('Pedido cancelado!', 'error')">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>DEF67890</strong></td>
+                                <td>
+                                    <div>
+                                        <strong>Pedro Lima</strong>
+                                        <small class="d-block text-muted">(244) 900-000-002</small>
+                                    </div>
+                                </td>
+                                <td>13/11/2025 09:15</td>
+                                <td><strong class="text-success">R$ 198,50</strong></td>
+                                <td><span class="badge bg-success">Transferência</span></td>
+                                <td><span class="badge bg-success badge-custom">Confirmado</span></td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#orderDetailsModal" onclick="showToast('Carregando detalhes...', 'info')">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info" onclick="showToast('Marcado como pronto!', 'success')">
+                                            <i class="bi bi-box-seam"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>GHI11223</strong></td>
+                                <td>
+                                    <div>
+                                        <strong>Ana Silva</strong>
+                                        <small class="d-block text-muted">(244) 900-000-003</small>
+                                    </div>
+                                </td>
+                                <td>13/11/2025 08:45</td>
+                                <td><strong class="text-success">R$ 567,00</strong></td>
+                                <td><span class="badge bg-warning">Dinheiro</span></td>
+                                <td><span class="badge bg-secondary badge-custom">Pendente</span></td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#orderDetailsModal" onclick="showToast('Carregando detalhes...', 'info')">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="showToast('Pedido cancelado!', 'error')">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>JKL33445</strong></td>
+                                <td>
+                                    <div>
+                                        <strong>Roberto Alves</strong>
+                                        <small class="d-block text-muted">(244) 900-000-004</small>
+                                    </div>
+                                </td>
+                                <td>12/11/2025 16:20</td>
+                                <td><strong class="text-success">R$ 234,80</strong></td>
+                                <td><span class="badge bg-info">Crédito</span></td>
+                                <td><span class="badge bg-info badge-custom">Pronto</span></td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#orderDetailsModal" onclick="showToast('Carregando detalhes...', 'info')">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-success" onclick="showToast('Pedido concluído!', 'success')">
+                                            <i class="bi bi-check2-all"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer bg-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted">Mostrando 1-4 de 130 pedidos</span>
+                    <nav>
+                        <ul class="pagination mb-0">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Anterior</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Próximo</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Order Details Modal -->
+<div class="modal fade" id="orderDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 16px; border: none;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #4f46e5, #6366f1); color: white; border-radius: 16px 16px 0 0;">
+                <h5 class="modal-title">
+                    <i class="bi bi-receipt me-2"></i>
+                    Detalhes do Pedido #ABC12345
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold mb-3"><i class="bi bi-person me-2"></i>Informações do Cliente</h6>
+                        <p class="mb-1"><strong>Nome:</strong> Maria Santos</p>
+                        <p class="mb-1"><strong>Telefone:</strong> (244) 900-000-001</p>
+                        <p class="mb-1"><strong>E-mail:</strong> maria@email.com</p>
+                        <p class="mb-0"><strong>Endereço:</strong> Rua Example, 123</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>Informações do Pedido</h6>
+                        <p class="mb-1"><strong>Data:</strong> 13/11/2025 10:30</p>
+                        <p class="mb-1"><strong>Pagamento:</strong> <span class="badge bg-primary">PIX</span></p>
+                        <p class="mb-0"><strong>Status:</strong> <span class="badge bg-warning">Comprovante Enviado</span></p>
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+                
+                <h6 class="fw-bold mb-3"><i class="bi bi-box-seam me-2"></i>Produtos</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Qtd</th>
+                                <th>Preço Unit.</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Arroz Branco 5kg</td>
+                                <td>2</td>
+                                <td>R$ 25,90</td>
+                                <td>R$ 51,80</td>
+                            </tr>
+                            <tr>
+                                <td>Feijão Preto 1kg</td>
+                                <td>3.5</td>
+                                <td>R$ 8,50</td>
+                                <td>R$ 29,75</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal:</span>
+                    <strong>R$ 345,00</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Desconto:</span>
+                    <strong>R$ 0,00</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="fs-5 fw-bold">Total:</span>
+                    <strong class="fs-4 text-success">R$ 345,00</strong>
+                </div>
+                
+                <div class="mb-3">
+                    <h6 class="fw-bold mb-2"><i class="bi bi-file-earmark-image me-2"></i>Comprovante de Pagamento</h6>
+                    <img src="https://via.placeholder.com/400x200" class="img-fluid rounded" alt="Comprovante">
+                </div>
+                
+                <div class="d-flex gap-2 justify-content-end">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-2"></i>
+                        Recusar
+                    </button>
+                    <button type="button" class="btn btn-primary-custom" onclick="showToast('Pedido confirmado!', 'success')">
+                        <i class="bi bi-check-circle me-2"></i>
+                        Confirmar Pedido
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Order Modal -->
+<div class="modal fade" id="newOrderModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 16px; border: none;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #4f46e5, #6366f1); color: white; border-radius: 16px 16px 0 0;">
+                <h5 class="modal-title">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    Novo Pedido
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form action="#" method="POST">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Preencha os dados para criar um pedido manualmente
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label-custom">Cliente</label>
+                        <select class="form-select form-control-custom" name="customer" required>
+                            <option value="">Selecione o cliente...</option>
+                            <option>Maria Santos</option>
+                            <option>Pedro Lima</option>
+                            <option>Ana Silva</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label-custom">Método de Pagamento</label>
+                        <select class="form-select form-control-custom" name="payment_method" required>
+                            <option value="">Selecione...</option>
+                            <option>Dinheiro</option>
+                            <option>PIX</option>
+                            <option>Transferência</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label-custom">Observações</label>
+                        <textarea class="form-control form-control-custom" name="notes" rows="3"></textarea>
+                    </div>
+                    <div class="d-flex gap-2 justify-content-end">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary-custom" onclick="showToast('Pedido criado!', 'success')">Criar Pedido</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

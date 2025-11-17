@@ -1,0 +1,334 @@
+{% extends 'base.html' %}
+
+{% block title %}Relatórios - PDV System{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="row mb-4 animate__animated animate__fadeIn">
+    <div class="col-12">
+        <h2 class="fw-bold mb-1">
+            <i class="bi bi-graph-up me-2"></i>
+            Relatórios e Análises
+        </h2>
+        <p class="text-muted mb-0">Acompanhe o desempenho de vendas e estoque</p>
+    </div>
+</div>
+
+<!-- Period Selection -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card-custom">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label-custom">Período</label>
+                        <select class="form-select form-control-custom">
+                            <option>Hoje</option>
+                            <option>Esta Semana</option>
+                            <option selected>Este Mês</option>
+                            <option>Este Ano</option>
+                            <option>Personalizado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label-custom">Data Inicial</label>
+                        <input type="date" class="form-control form-control-custom" value="2025-11-01">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label-custom">Data Final</label>
+                        <input type="date" class="form-control form-control-custom" value="2025-11-13">
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button class="btn btn-primary-custom w-100" onclick="showToast('Relatório atualizado!', 'success')">
+                            <i class="bi bi-arrow-clockwise me-2"></i>
+                            Atualizar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Stats -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3 col-sm-6">
+        <div class="stats-card success animate__animated animate__fadeInUp">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon success me-3">
+                    <i class="bi bi-currency-dollar"></i>
+                </div>
+                <div>
+                    <p class="text-muted mb-1 small">Receita Total</p>
+                    <h3 class="fw-bold mb-0">R$ 245.890</h3>
+                    <small class="text-success"><i class="bi bi-arrow-up"></i> +12.5%</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6">
+        <div class="stats-card primary animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon primary me-3">
+                    <i class="bi bi-cart-check"></i>
+                </div>
+                <div>
+                    <p class="text-muted mb-1 small">Total de Vendas</p>
+                    <h3 class="fw-bold mb-0">1.245</h3>
+                    <small class="text-success"><i class="bi bi-arrow-up"></i> +8.3%</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6">
+        <div class="stats-card warning animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon warning me-3">
+                    <i class="bi bi-wallet2"></i>
+                </div>
+                <div>
+                    <p class="text-muted mb-1 small">Lucro</p>
+                    <h3 class="fw-bold mb-0">R$ 78.340</h3>
+                    <small class="text-success"><i class="bi bi-arrow-up"></i> +15.2%</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6">
+        <div class="stats-card danger animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon danger me-3">
+                    <i class="bi bi-graph-down"></i>
+                </div>
+                <div>
+                    <p class="text-muted mb-1 small">Ticket Médio</p>
+                    <h3 class="fw-bold mb-0">R$ 197,50</h3>
+                    <small class="text-danger"><i class="bi bi-arrow-down"></i> -2.1%</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="card-custom animate__animated animate__fadeInLeft">
+            <div class="card-header-custom d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-bar-chart me-2"></i>Vendas por Dia</span>
+                <div class="btn-group btn-group-sm" role="group">
+                    <button class="btn btn-light active">7 dias</button>
+                    <button class="btn btn-light">15 dias</button>
+                    <button class="btn btn-light">30 dias</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="text-center py-5">
+                    <i class="bi bi-bar-chart-line text-primary" style="font-size: 4rem;"></i>
+                    <p class="text-muted mt-3">Gráfico de vendas por dia</p>
+                    <p class="small text-muted">(Integração com biblioteca de gráficos como Chart.js)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card-custom animate__animated animate__fadeInRight">
+            <div class="card-header-custom">
+                <i class="bi bi-pie-chart me-2"></i>Vendas por Categoria
+            </div>
+            <div class="card-body">
+                <div class="text-center py-4">
+                    <i class="bi bi-pie-chart text-success" style="font-size: 3rem;"></i>
+                    <p class="text-muted mt-3">Gráfico de pizza</p>
+                </div>
+                <div class="mt-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span><i class="bi bi-circle-fill text-primary me-2"></i>Alimentos</span>
+                        <strong>45%</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span><i class="bi bi-circle-fill text-success me-2"></i>Bebidas</span>
+                        <strong>30%</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span><i class="bi bi-circle-fill text-warning me-2"></i>Higiene</span>
+                        <strong>15%</strong>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span><i class="bi bi-circle-fill text-danger me-2"></i>Limpeza</span>
+                        <strong>10%</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Weekly Reports -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card-custom animate__animated animate__fadeInUp">
+            <div class="card-header-custom d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-calendar-week me-2"></i>Relatórios Semanais</span>
+                <button class="btn btn-sm btn-light" onclick="showToast('Gerando relatório...', 'info')">
+                    <i class="bi bi-download me-2"></i>
+                    Exportar
+                </button>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Semana</th>
+                                <th>Período</th>
+                                <th>Vendas</th>
+                                <th>Pedidos</th>
+                                <th>Receita</th>
+                                <th>Lucro</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Semana 46/2025</strong></td>
+                                <td>06/11 - 12/11</td>
+                                <td><strong>287</strong></td>
+                                <td><strong>45</strong></td>
+                                <td><strong class="text-success">R$ 56.890,00</strong></td>
+                                <td><strong class="text-success">R$ 18.230,00</strong></td>
+                                <td><span class="badge bg-success badge-custom">Finalizado</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Semana 45/2025</strong></td>
+                                <td>30/10 - 05/11</td>
+                                <td><strong>312</strong></td>
+                                <td><strong>52</strong></td>
+                                <td><strong class="text-success">R$ 62.340,00</strong></td>
+                                <td><strong class="text-success">R$ 19.980,00</strong></td>
+                                <td><span class="badge bg-success badge-custom">Finalizado</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Semana 44/2025</strong></td>
+                                <td>23/10 - 29/10</td>
+                                <td><strong>298</strong></td>
+                                <td><strong>48</strong></td>
+                                <td><strong class="text-success">R$ 59.120,00</strong></td>
+                                <td><strong class="text-success">R$ 18.890,00</strong></td>
+                                <td><span class="badge bg-success badge-custom">Finalizado</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Semana 43/2025</strong></td>
+                                <td>16/10 - 22/10</td>
+                                <td><strong>276</strong></td>
+                                <td><strong>41</strong></td>
+                                <td><strong class="text-success">R$ 54.670,00</strong></td>
+                                <td><strong class="text-success">R$ 17.450,00</strong></td>
+                                <td><span class="badge bg-success badge-custom">Finalizado</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top Sellers & Top Products -->
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card-custom animate__animated animate__fadeInLeft">
+            <div class="card-header-custom">
+                <i class="bi bi-trophy me-2"></i>Top Vendedores
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3 p-3 bg-light rounded-3">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                            <strong class="text-white">1°</strong>
+                        </div>
+                        <div>
+                            <strong>João Silva</strong>
+                            <small class="d-block text-muted">287 vendas</small>
+                        </div>
+                    </div>
+                    <strong class="text-success">R$ 56.890</strong>
+                </div>
+                
+                <div class="d-flex align-items-center justify-content-between mb-3 p-3 bg-light rounded-3">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                            <strong class="text-white">2°</strong>
+                        </div>
+                        <div>
+                            <strong>Ana Costa</strong>
+                            <small class="d-block text-muted">245 vendas</small>
+                        </div>
+                    </div>
+                    <strong class="text-success">R$ 48.230</strong>
+                </div>
+                
+                <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-3">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-info rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                            <strong class="text-white">3°</strong>
+                        </div>
+                        <div>
+                            <strong>Carlos Mendes</strong>
+                            <small class="d-block text-muted">198 vendas</small>
+                        </div>
+                    </div>
+                    <strong class="text-success">R$ 39.450</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card-custom animate__animated animate__fadeInRight">
+            <div class="card-header-custom">
+                <i class="bi bi-star me-2"></i>Produtos Mais Vendidos
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3 p-3 bg-light rounded-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-box text-primary fs-3 me-3"></i>
+                        <div>
+                            <strong>Arroz Branco 5kg</strong>
+                            <small class="d-block text-muted">456 unidades</small>
+                        </div>
+                    </div>
+                    <strong class="text-success">R$ 11.810</strong>
+                </div>
+                
+                <div class="d-flex align-items-center justify-content-between mb-3 p-3 bg-light rounded-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-box text-primary fs-3 me-3"></i>
+                        <div>
+                            <strong>Feijão Preto 1kg</strong>
+                            <small class="d-block text-muted">398 unidades</small>
+                        </div>
+                    </div>
+                    <strong class="text-success">R$ 3.383</strong>
+                </div>
+                
+                <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-box text-primary fs-3 me-3"></i>
+                        <div>
+                            <strong>Óleo de Soja 900ml</strong>
+                            <small class="d-block text-muted">342 unidades</small>
+                        </div>
+                    </div>
+                    <strong class="text-success">R$ 2.702</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

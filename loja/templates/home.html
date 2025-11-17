@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Início - PDV System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="row mb-5 animate__animated animate__fadeIn">
+    <div class="col-12">
+        <div class="card p-5 text-center" style="background: linear-gradient(135deg, rgba(124, 152, 133, 0.08), rgba(163, 196, 181, 0.08)); border: 1px solid rgba(124, 152, 133, 0.2); border-radius: 20px; box-shadow: 0 8px 32px rgba(124, 152, 133, 0.15);">
+            <h1 class="display-4 fw-bold mb-3" style="color: var(--dark-color);">
+                Bem-vindo ao <span style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">PDV System</span>
+            </h1>
+            <p class="lead mb-4" style="color: var(--text-secondary);">Sistema completo de gerenciamento de vendas</p>
+            <p style="color: var(--text-secondary);">Olá, <strong style="color: var(--primary-color);">{{ request.user.get_full_name|default:request.user.username }}</strong> | Perfil: <strong style="color: var(--secondary-color);">{{ user_role }}</strong></p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap mt-4">
+                <a href="{% url 'nova_venda' %}" class="btn btn-lg" style="background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); color: white; border: none; padding: 12px 32px; border-radius: 12px; font-weight: 600; box-shadow: 0 4px 20px rgba(124, 152, 133, 0.4); transition: all 0.3s;">
+                    <i class="bi bi-plus-circle me-2"></i>Nova Venda
+                </a>
+                <a href="{% url 'produtos' %}" class="btn btn-lg" style="background: white; color: var(--primary-color); border: 2px solid var(--primary-color); padding: 12px 32px; border-radius: 12px; font-weight: 600; transition: all 0.3s;">
+                    <i class="bi bi-box-seam me-2"></i>Ver Produtos
+                </a>
+                <a href="{% url 'pedidos' %}" class="btn btn-lg" style="background: white; color: var(--secondary-color); border: 2px solid var(--secondary-color); padding: 12px 32px; border-radius: 12px; font-weight: 600; transition: all 0.3s;">
+                    <i class="bi bi-receipt me-2"></i>Pedidos
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-5 g-4">
+    <div class="col-md-3 col-sm-6">
+        <div class="card h-100 border-0" style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(124, 152, 133, 0.12); border-left: 4px solid var(--primary-color); transition: all 0.3s; overflow: hidden; position: relative;">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 rounded p-3" style="background: linear-gradient(135deg, rgba(124, 152, 133, 0.15), rgba(163, 196, 181, 0.15));">
+                        <i class="bi bi-cart-check fs-2" style="color: var(--primary-color);"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h3 class="fw-bold mb-0" style="color: var(--dark-color);">{{ total_sales_today }}</h3>
+                        <p class="text-muted mb-0 small">Vendas Hoje</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6">
+        <div class="card h-100 border-0" style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(130, 166, 141, 0.12); border-left: 4px solid var(--success-color); transition: all 0.3s;">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 rounded p-3" style="background: linear-gradient(135deg, rgba(130, 166, 141, 0.15), rgba(107, 165, 131, 0.15));">
+                        <i class="bi bi-currency-dollar fs-2" style="color: var(--success-color);"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h3 class="fw-bold mb-0" style="color: var(--dark-color);">{{ revenue_today|floatformat:2 }} MT</h3>
+                        <p class="text-muted mb-0 small">Receita Hoje</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6">
+        <div class="card h-100 border-0" style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(212, 165, 116, 0.12); border-left: 4px solid var(--warning-color); transition: all 0.3s;">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 rounded p-3" style="background: linear-gradient(135deg, rgba(212, 165, 116, 0.15), rgba(184, 149, 106, 0.15));">
+                        <i class="bi bi-receipt fs-2" style="color: var(--warning-color);"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h3 class="fw-bold mb-0" style="color: var(--dark-color);">{{ pending_orders }}</h3>
+                        <p class="text-muted mb-0 small">Pedidos Pendentes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6">
+        <div class="card h-100 border-0" style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(201, 112, 100, 0.12); border-left: 4px solid var(--danger-color); transition: all 0.3s;">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 rounded p-3" style="background: linear-gradient(135deg, rgba(201, 112, 100, 0.15), rgba(180, 95, 85, 0.15));">
+                        <i class="bi bi-box fs-2" style="color: var(--danger-color);"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h3 class="fw-bold mb-0" style="color: var(--dark-color);">{{ low_stock_products }}</h3>
+                        <p class="text-muted mb-0 small">Estoque Baixo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Sales and Orders -->
+<div class="row g-4">
+    <!-- Recent Sales -->
+    <div class="col-lg-8">
+        <div class="card border-0" style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(102, 126, 234, 0.12);">
+            <div class="card-header d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 16px 16px 0 0; padding: 1.25rem;">
+                <h5 class="mb-0"><i class="bi bi-graph-up me-2"></i>Vendas Recentes</h5>
+                {% if user_role == 'SELLER' %}
+                <span class="badge" style="background: rgba(255, 255, 255, 0.25);">Apenas suas vendas de hoje</span>
+                {% else %}
+                <span class="badge" style="background: rgba(255, 255, 255, 0.25);">Todas as vendas de hoje</span>
+                {% endif %}
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead style="background: rgba(102, 126, 234, 0.08); color: var(--dark-color);">
+                            <tr>
+                                <th style="padding: 1rem;">Nº Venda</th>
+                                <th>Vendedor</th>
+                                <th>Cliente</th>
+                                <th>Itens</th>
+                                <th>Total</th>
+                                <th>Horário</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sale in recent_sales %}
+                            <tr style="transition: all 0.2s;">
+                                <td style="padding: 1rem;"><strong style="color: var(--primary-color);">{{ sale.sale_number }}</strong></td>
+                                <td>{{ sale.seller.get_full_name|default:sale.seller.username }}</td>
+                                <td>{{ sale.customer.full_name|default:"Sem cliente" }}</td>
+                                <td><span class="badge" style="background: var(--secondary-color); color: white;">{{ sale.items.count }} itens</span></td>
+                                <td><strong style="color: var(--success-color);">{{ sale.total_amount|floatformat:2 }} MT</strong></td>
+                                <td style="color: var(--gray-color);">{{ sale.created_at|date:"H:i" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center py-5 text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-2" style="color: var(--gray-color);"></i>
+                                    <p>Nenhuma venda registrada hoje</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Orders -->
+    <div class="col-lg-4">
+        <div class="card border-0" style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(124, 152, 133, 0.1);">
+            <div class="card-header" style="background: linear-gradient(135deg, #B8956A, #E8C4A0); color: white; border-radius: 16px 16px 0 0; padding: 1.25rem;">
+                <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i>Pedidos Pendentes</h5>
+            </div>
+            <div class="card-body">
+                {% for order in recent_orders %}
+                <div class="d-flex justify-content-between align-items-start mb-3 pb-3" style="border-bottom: 1px solid rgba(124, 152, 133, 0.1);">
+                    <div>
+                        <h6 class="mb-1"><strong style="color: var(--primary-color);">{{ order.order_code }}</strong></h6>
+                        <p class="mb-1 small text-muted">{{ order.customer.full_name }}</p>
+                        <p class="mb-0 fw-bold" style="color: var(--secondary-color);">{{ order.total_amount|floatformat:2 }} MT</p>
+                    </div>
+                    <span class="badge {% if order.status == 'PENDING' %}{% else %}{% endif %}" style="background: {% if order.status == 'PENDING' %}#D4A574{% else %}#7FA9AE{% endif %}; color: white;">
+                        {{ order.get_status_display }}
+                    </span>
+                </div>
+                {% empty %}
+                <div class="text-center py-4 text-muted">
+                    <i class="bi bi-check-circle fs-1 d-block mb-2" style="color: var(--success-color);"></i>
+                    <p>Nenhum pedido pendente</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% if recent_orders %}
+            <div class="card-footer" style="background: rgba(124, 152, 133, 0.05); border-top: 1px solid rgba(124, 152, 133, 0.1);">
+                <a href="{% url 'pedidos' %}" class="btn w-100" style="background: linear-gradient(135deg, #7C9885, #A3C4B5); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 600;">
+                    Ver Todos os Pedidos
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
