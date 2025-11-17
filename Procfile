@@ -1,1 +1,1 @@
-web: gunicorn PDVSYSTEM.wsgi:application --bind 0.0.0.0:$PORT
+web: gunicorn PDVSYSTEM.wsgi --bind 0.0.0.0:$PORT
