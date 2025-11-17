@@ -556,6 +556,8 @@ class NotificationAdmin(admin.ModelAdmin):
 
 # Import custom admin site
 from .admin_site import pdv_admin_site
+from django.contrib.auth.models import User, Group
+from django.contrib.auth.admin import UserAdmin, GroupAdmin
 
 # Register all models with custom admin site
 pdv_admin_site.register(Category, CategoryAdmin)
@@ -569,3 +571,5 @@ pdv_admin_site.register(WeeklySalesReport, WeeklySalesReportAdmin)
 pdv_admin_site.register(SellerPerformance, SellerPerformanceAdmin)
 pdv_admin_site.register(AuditLog, AuditLogAdmin)
 pdv_admin_site.register(Notification, NotificationAdmin)
+pdv_admin_site.register(User, UserAdmin)
+pdv_admin_site.register(Group, GroupAdmin)
