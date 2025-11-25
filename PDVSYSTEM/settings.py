@@ -81,6 +81,7 @@ WSGI_APPLICATION = 'PDVSYSTEM.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+
 # Use PostgreSQL on Render, SQLite locally
 database_url = os.environ.get('DATABASE_URL', '')
 if database_url and database_url.startswith(('postgres://', 'postgresql://')):

@@ -769,58 +769,59 @@ document.getElementById('confirmSaleBtn').addEventListener('click', async functi
     }
 });
 
-// Product search
+
+// Busca dinâmica: exibe cards filtrados no grid
 let searchTimeout;
 document.getElementById('productSearch').addEventListener('input', function() {
     const query = this.value.trim();
-    
     clearTimeout(searchTimeout);
-    
+
+    // Se busca vazia, restaura todos os produtos
     if (query.length < 2) {
-        document.getElementById('searchResults').classList.remove('show');
+        restoreOriginalProducts();
         return;
     }
-    
+
     searchTimeout = setTimeout(async () => {
         try {
             const response = await fetch(`{% url "api_search_products" %}?q=${encodeURIComponent(query)}`);
             const data = await response.json();
-            
+            const grid = document.getElementById('productsGrid');
+
             if (data.success && data.products.length > 0) {
-                const resultsEl = document.getElementById('searchResults');
-                resultsEl.innerHTML = data.products.map(product => `
-                    <div class="search-result-item ${!product.can_sell ? 'text-muted' : ''}" 
-                         data-product-id="${product.id}">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <strong>${product.name}</strong>
-                                <small class="d-block text-muted">${product.category} - ${product.code}</small>
-                            </div>
-                            <div class="text-end">
-                                <div class="fw-bold">${formatCurrency(product.unit_price)}</div>
-                                <small class="${product.stock_quantity === 0 ? 'text-danger' : product.stock_status === 'LOW_STOCK' ? 'text-warning' : 'text-success'}">
-                                    ${product.stock_quantity.toFixed(3)} ${product.unit}
-                                </small>
+                grid.innerHTML = data.products.map(product => `
+                    <div class="col-md-4 col-lg-3">
+                        <div class="card product-card h-100 ${product.stock_quantity === 0 ? 'disabled out-of-stock' : (product.stock_status === 'LOW_STOCK' ? 'low-stock' : '')}" 
+                             data-product-id="${product.id}"
+                             data-name="${product.name}"
+                             data-price="${product.unit_price}"
+                             data-stock="${product.stock_quantity}"
+                             data-unit="${product.unit}"
+                             data-allows-fraction="${product.allows_fraction ? 'true' : 'false'}"
+                             ${product.stock_quantity === 0 ? 'style="pointer-events: none;"' : ''}>
+                            <span class="stock-badge">
+                                ${product.stock_quantity === 0 ? '<span class="badge bg-danger"><i class="bi bi-x-circle"></i> Esgotado</span>' : (product.stock_status === 'LOW_STOCK' ? '<span class="badge bg-warning"><i class="bi bi-exclamation-triangle"></i> Baixo</span>' : '<span class="badge bg-success"><i class="bi bi-check-circle"></i> OK</span>')}
+                            </span>
+                            ${product.image_url ? `<img src="${product.image_url}" class="card-img-top product-image" alt="${product.name}">` : `<div class="product-image bg-light d-flex align-items-center justify-content-center"><i class="bi bi-box-seam fs-1 text-muted"></i></div>`}
+                            <div class="card-body p-3">
+                                <h6 class="card-title mb-1">${product.name}</h6>
+                                <p class="text-muted small mb-1">${product.category}</p>
+                                <p class="mb-1"><strong class="text-primary fs-5">${formatCurrency(product.unit_price)}</strong> / ${product.unit}</p>
+                                <p class="mb-0 small">
+                                    <i class="bi bi-box"></i> Estoque: 
+                                    <strong class="${product.stock_quantity === 0 ? 'text-danger' : (product.stock_status === 'LOW_STOCK' ? 'text-warning' : 'text-success')}">
+                                        ${parseFloat(product.stock_quantity).toFixed(3)} ${product.unit}
+                                    </strong>
+                                </p>
                             </div>
                         </div>
                     </div>
                 `).join('');
-                
-
-                resultsEl.querySelectorAll('.search-result-item').forEach(item => {
-                    item.addEventListener('click', function() {
-                        const card = document.querySelector(`[data-product-id="${this.dataset.productId}"]`);
-                        if (card && !card.classList.contains('disabled')) {
-                            // Garante que o handler está atualizado
-                            attachProductCardClickHandlers();
-                            card.click();
-                        }
-                        resultsEl.classList.remove('show');
-                        document.getElementById('productSearch').value = '';
-                    });
-                });
-                
-                resultsEl.classList.add('show');
+                attachProductCardClickHandlers();
+                document.getElementById('productsCount').textContent = `${data.products.length} produto(s)`;
+            } else {
+                grid.innerHTML = `<div class="col-12"><div class="alert alert-info"><i class="bi bi-info-circle me-2"></i>Nenhum produto encontrado.</div></div>`;
+                document.getElementById('productsCount').textContent = `0 produto(s)`;
             }
         } catch (error) {
             console.error('Search error:', error);
@@ -828,11 +829,9 @@ document.getElementById('productSearch').addEventListener('input', function() {
     }, 300);
 });
 
-// Close search results when clicking outside
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.product-search')) {
-        document.getElementById('searchResults').classList.remove('show');
-    }
-});
+// Função para restaurar grid original
+function restoreOriginalProducts() {
+    location.reload(); // Simples: recarrega página para restaurar grid original
+}
 </script>
 {% endblock %}
