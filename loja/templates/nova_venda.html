@@ -419,37 +419,45 @@ function formatCurrency(value) {
     }) + ' MT';
 }
 
-// Product card click handler
-document.querySelectorAll('.product-card:not(.disabled)').forEach(card => {
-    card.addEventListener('click', function() {
-        const productId = this.dataset.productId;
-        const productName = this.dataset.name;
-        const productPrice = parseFloat(this.dataset.price);
-        const productStock = parseFloat(this.dataset.stock);
-        const productUnit = this.dataset.unit;
-        const allowsFraction = this.dataset.allowsFraction === 'true';
-        
-        currentProduct = {
-            id: productId,
-            name: productName,
-            price: productPrice,
-            stock: productStock,
-            unit: productUnit,
-            allowsFraction: allowsFraction
-        };
-        
-        // Set modal values
-        document.getElementById('modalProductName').textContent = productName;
-        document.getElementById('modalProductInfo').textContent = 
-            `Preço: ${formatCurrency(productPrice)} / ${productUnit} | Estoque: ${productStock.toFixed(3)} ${productUnit}`;
-        document.getElementById('modalUnit').textContent = productUnit;
-        document.getElementById('quantityInput').value = allowsFraction ? '0.001' : '1';
-        document.getElementById('quantityInput').step = allowsFraction ? '0.001' : '1';
-        
-        updateItemTotal();
-        quantityModal.show();
+
+// Função para associar evento de clique aos cards de produto
+function attachProductCardClickHandlers() {
+    document.querySelectorAll('.product-card:not(.disabled)').forEach(card => {
+        // Remove event listener anterior, se houver
+        card.onclick = null;
+        card.addEventListener('click', function() {
+            const productId = this.dataset.productId;
+            const productName = this.dataset.name;
+            const productPrice = parseFloat(this.dataset.price);
+            const productStock = parseFloat(this.dataset.stock);
+            const productUnit = this.dataset.unit;
+            const allowsFraction = this.dataset.allowsFraction === 'true';
+
+            currentProduct = {
+                id: productId,
+                name: productName,
+                price: productPrice,
+                stock: productStock,
+                unit: productUnit,
+                allowsFraction: allowsFraction
+            };
+
+            // Set modal values
+            document.getElementById('modalProductName').textContent = productName;
+            document.getElementById('modalProductInfo').textContent = 
+                `Preço: ${formatCurrency(productPrice)} / ${productUnit} | Estoque: ${productStock.toFixed(3)} ${productUnit}`;
+            document.getElementById('modalUnit').textContent = productUnit;
+            document.getElementById('quantityInput').value = allowsFraction ? '0.001' : '1';
+            document.getElementById('quantityInput').step = allowsFraction ? '0.001' : '1';
+
+            updateItemTotal();
+            quantityModal.show();
+        });
     });
-});
+}
+
+// Chama ao carregar a página
+attachProductCardClickHandlers();
 
 // Quantity input handlers
 document.getElementById('quantityInput').addEventListener('input', updateItemTotal);
@@ -798,10 +806,13 @@ document.getElementById('productSearch').addEventListener('input', function() {
                     </div>
                 `).join('');
                 
+
                 resultsEl.querySelectorAll('.search-result-item').forEach(item => {
                     item.addEventListener('click', function() {
                         const card = document.querySelector(`[data-product-id="${this.dataset.productId}"]`);
                         if (card && !card.classList.contains('disabled')) {
+                            // Garante que o handler está atualizado
+                            attachProductCardClickHandlers();
                             card.click();
                         }
                         resultsEl.classList.remove('show');
